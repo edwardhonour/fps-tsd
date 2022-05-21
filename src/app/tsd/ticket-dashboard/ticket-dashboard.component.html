@@ -1,0 +1,319 @@
+<!-- Loading bar -->
+<fuse-loading-bar></fuse-loading-bar>
+<!-- Navigation -->
+<fuse-vertical-navigation
+    class="dark bg-gray-900 print:hidden"
+    [mode]="isScreenSmall ? 'over' : 'side'"
+    [name]="'mainNavigation'"
+    [navigation]="navigation.default"
+    [opened]="!isScreenSmall">
+    <!-- Navigation header hook -->
+    <ng-container fuseVerticalNavigationContentHeader>
+        <div class="flex items-center w-full p-4 pl-6">
+            <!-- Logo -->
+            <div class="flex items-center justify-center">
+                <img
+                    class="w-8"
+                    src="assets/images/logo/logo.svg">
+            </div>
+            <!-- Components -->
+            <div class="flex items-center ml-auto">
+                <notifications></notifications>
+                <user [showAvatar]="false"></user>
+            </div>
+        </div>
+        <!-- User -->
+        <div class="flex flex-col items-center w-full p-4">
+            <div class="relative w-24 h-24">
+                <img
+                    class="w-full h-full rounded-full"
+                    *ngIf="user.avatar"
+                    [src]="user.avatar"
+                    alt="User avatar">
+                <mat-icon
+                    class="icon-size-24"
+                    *ngIf="!user.avatar"
+                    [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+            </div>
+            <div class="flex flex-col items-center justify-center w-full mt-6">
+                <div class="w-full whitespace-nowrap overflow-ellipsis overflow-hidden text-center leading-normal font-medium">
+                    {{user.name}}
+                </div>
+                <div class="w-full mt-0.5 whitespace-nowrap overflow-ellipsis overflow-hidden text-center text-md leading-normal font-medium text-secondary">
+                    {{user.email}}
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <!-- Navigation footer hook -->
+    <ng-container fuseVerticalNavigationContentFooter>
+        <div class="flex flex-0 items-center justify-center h-16 pr-6 pl-2 mt-2 mb-4 opacity-12">
+            <img
+                class="max-w-36"
+                src="assets/images/logo/logo-text-on-dark.svg">
+        </div>
+    </ng-container>
+</fuse-vertical-navigation>
+
+<div
+    class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto"
+    cdkScrollable>
+<!--- THIS IS MOVED INSIDE THE MAIN SECTION AFTER THE FIRST LINE -->
+<div class="relative flex flex-0 items-center w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-card dark:bg-transparent print:hidden">
+    <!-- Navigation toggle button -->
+    <button
+        mat-icon-button
+        (click)="toggleNavigation('mainNavigation')">
+        <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+    </button>
+    <!-- Components -->
+    <div class="flex items-center pl-2 ml-auto space-x-0.5 sm:space-x-2">
+        <languages></languages>
+        <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>
+        <search [appearance]="'bar'"></search>
+        <shortcuts></shortcuts>
+        <messages></messages>
+    </div>
+</div>
+    <!-- Header -->
+    <div class="relative flex-0 py-8 px-4 sm:p-16 overflow-hidden bg-gray-800 dark"  style="padding-bottom: 20px !important; padding-top: 20px !important;">
+        <!-- Background - @formatter:off -->
+        <!-- Rings -->
+        <svg class="absolute inset-0 pointer-events-none"
+             viewBox="0 0 960 540" width="100%" height="100%" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+            <g class="text-gray-700 opacity-25" fill="none" stroke="currentColor" stroke-width="100">
+                <circle r="234" cx="196" cy="23"></circle>
+                <circle r="234" cx="790" cy="491"></circle>
+            </g>
+        </svg>
+        <!-- @formatter:on -->
+        <div class="z-10 relative flex flex-col items-center" style="margin-top: 40px;">
+            <h2 class="text-xl font-semibold">Trouble Ticket Dashboard</h2>
+            <div class="mt-1 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight text-center">
+                {{ data.BUILDING_NBR}} - {{ data.FACILITY_NAME }}
+            </div>
+            <div class="max-w-2xl mt-6 sm:text-2xl text-center tracking-tight text-secondary">
+                Ticket #{{ data.VULNERABILITY_ID }}<br>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+
+<div class="container-fluid p-1" style="margin-top: 10px;">
+    <div class="row">
+        <div class="col-xl-2">
+        </div>
+        <div class="col-xl-10">
+            <div class="card card-body mb-4" style="margin-top: 10px !important;">
+                <div class="row">
+                    <div class="col-xl-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">    <!-- CONTAINER ROW -->
+       <div class="col-xl-2"> &nbsp; </div>
+        <div class="col-xl-3">
+                <div class="card card-body">
+                    <h2 style="font-size: 24px;"><b>{{ data.BUILDING_NBR }} - {{ data.FACILITY_NAME }}</b></h2>
+
+                    <table class="table table-striped">
+                        <thead>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Region: </th>
+                                <td>{{ data.REGION_ID }}</td>
+                            </tr>
+                            <tr>
+                                <th>FSL: </th>
+                                <td>{{ data.FSL }}</td>
+                            </tr>
+                            <tr>
+                                <th>Address: </th>
+                                <td>{{ data.ADDRESS }}</td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>{{ data.CITY_NAME }} {{ data.STATE_ABBR }} {{ data.ZIPCODE }}</td>
+                            </tr>
+                            <tr>
+                                <th>Inspector: </th>
+                                <td>{{ data.INSPECTOR_NAME }}</td>
+                            </tr>
+                            <tr>
+                                <th>Area Commander </th>
+                                <td>{{ data.AREA_COMMANDER }}</td>
+                            </tr>
+                            <tr>
+                                <th>District Commander: </th>
+                                <td>{{ data.DISTRICT_COMMANDER }}</td>
+                            </tr>
+                            <tr>
+                                <th>FSCDO: </th>
+                                <td>{{ data.FSCDO_NAME }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> <!-- CARD BODY -->
+                <div class="card card-body mt-3">
+                    <h2 style="font-size: 24px;"><b>Ticket Contact</b></h2>
+
+                    <table class="table table-striped">
+                        <thead>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Contact Phone: </th>
+                                <td>{{ data.CONTACT_PHONE }}</td>
+                            </tr>
+                            <tr>
+                                <th>Call Sign: </th>
+                                <td>{{ data.CALL_SIGN }}</td>
+                            </tr>
+                            <tr>
+                                <th>Contact Name</th>
+                                <td>{{ data.CONTACT_NAME }}</td>
+                            </tr>
+                            <tr>
+                                <th>Title: </th>
+                                <td>{{ data.TITLE }}</td>
+                            </tr>
+                            <tr>
+                                <th>Agency: </th>
+                                <td>{{ data.CONTACT_AGENCY_NAME }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email: </th>
+                                <td>{{ data.CONTACT_EMAIL }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> <!-- CARD BODY -->
+            </div>
+            <div class="col-xl-7">
+  
+                    <div class="row">
+                        <div class="col-xl-12">
+
+                            <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <h2 style="font-size: 24px;"><b>Ticket# {{ data.VULNERABILITY_ID }}</b></h2>
+ 
+                                        <table class="table table-responsive table-striped">
+                                            <thead>
+
+                                            </thead>
+                                            <tbody>
+                                                <tr><th style="width: 240px !important;">Ticket Number</th><td>{{ data.VULNERABILITY_ID }}</td></tr>                           
+                                                <tr><th style="width: 240px !important;">Ticket Date</th><td>{{ data.CREATED_DT }}</td></tr>      
+                                                <tr><th style="width: 240px !important;">Source</th><td>{{ data.CALL_TYPE }}</td></tr>
+                                                <tr><th style="width: 240px !important;">DOL Event</th><td>{{ data.EVENT_ID }}</td></tr>         
+                                                <tr><th style="width: 240px !important;">Priority</th><td>{{ data.PRIORITY }}</td></tr> 
+                                                <tr> <th style="width: 240px !important;">Entered By</th><td>{{ data.ENTERED_BY }}</td></tr>
+                                                <tr><th style="width: 240px !important;">Vulnerability Section</th><td>{{ data.SECTION_NAME }}</td></tr>
+                                                <tr><th style="width: 240px !important;">Status</th><td>{{ data.TCM_STATUS }}</td></tr>
+                                                <tr><th style="width: 240px !important;">Responsibility</th><td>{{ data.RESPONSIBILITY }}</td></tr>
+                                                <tr><th style="width: 240px !important;">Ticket Type:</th><td>{{ data.TICKET_TYPE }}</td></tr>
+                                                <tr><th colspan="2">Vulnerability / Issue</th></tr>
+                                                <tr><th style="width: 240px !important;"></th><td>{{ data.VULNERABILITY }}</td>   
+                                                <tr><th style="width: 240px !important;">Manufacturer:</th><td>{{ data.MFG }}</td></tr>
+                                                <tr><th style="width: 240px !important;">Model:</th><td>{{ data.MODEL }}</td></tr>
+                                                <tr><th style="width: 240px !important;">Serial:</th><td>{{ data.SERIAL }}</td></tr>
+                                                <tr><th style="width: 240px !important;">Location:</th><td>{{ data.LOCATION }}</td></tr>
+                                                <tr><th colspan="2">Recommendation / Request</th></tr>
+                                                <tr><th style="width: 240px !important;"></th><td>{{ data.RECCOMENDATION }}</td>                                 
+                                                <tr><th style="width: 240px !important;">Created:</th><td>{{ data.CREATED_BY }}</td></tr>
+                                                <tr><th style="width: 240px !important;">Assigned To:</th><td>{{ data.TCM_ASSIGNED_TO }}</td></tr>
+                                                <tr><th style="width: 240px !important;">Date Assigned:</th><td>{{ data.TCM_ASSIGNED_DT }}</td></tr>
+                                                   </tbody>
+                                                    </table>
+                            </div>
+         
+                            <div class="row">
+                                <div class="col-xl-3">
+                                    <button (click)="showAdd()" class="btn btn-primary">Add Note</button>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div *ngIf="adding=='Y'" class="card card-body mb-4" style="margin-top: 10px !important; background-color: bisque;">
+                        <div class="row">
+                        <div class="col-xl-10">
+                        <div class="flex-auto p-1">
+                            <div class="max-w-2xl">
+                                <h2 style="font-size:20px"><b>Add Note</b></h2>
+                                <form class="flex flex-col mt-3 p-3 pb-3 bg-card rounded-2xl shadow overflow-hidden" autocomplete="off"> 
+                                    <div class="flex flex-col gt-xs:flex-row">
+                                        <div class="flex flex-col gt-xs:flex-row">
+                                           <mat-form-field
+                                                [ngClass]="formFieldHelpers"
+                                                class="flex-auto gt-xs:pl-3">
+                                                <mat-label>Interaction</mat-label>
+                                                <mat-select  id="CALL_TYPE" name="CALL_TYPE" [(ngModel)]="data.noteData['CALL_TYPE']">
+                                                    <mat-option value="DISPATCH">Dispatch</mat-option>
+                                                    <mat-option value="CALL-IN">Service Desk Call</mat-option>
+                                                    <mat-option value="OTHER-IN">Other</mat-option>                          
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div> 
+                            <mat-form-field
+                            [ngClass]="formFieldHelpers"
+                            class="fuse-mat-textarea flex-auto">
+                            <mat-label>Note</mat-label>
+                            <textarea
+                                matInput
+                                [rows]="7"
+                                matTextareaAutosize
+                                id="NOTE" name="NOTE" [(ngModel)]="data.noteData['NOTE']"  autocomplete="new-password"></textarea>
+                        </mat-form-field>
+  
+                    <div class="flex items-center justify-end border-t -mx-8 mt-8 px-8 py-5 bg-gray-50 dark:bg-gray-700">
+                        <button (click)="showAdd()" mat-button>
+                            Cancel
+                        </button>
+                        <button
+                            class="px-6 ml-3"
+                            mat-flat-button
+                            [color]="'primary'" (click)="postNote()">
+                            Save
+                        </button>
+                    </div>
+                                        </div>
+</form>
+                                    </div>
+
+                            </div>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="card card-body mt-3">
+                    <div class="row">
+                        <div class="col-xl-7">
+                            <h2 style="font-size:24px;"><b>Notes / Activity</b></h2>                   
+                        </div>
+                        <div class="col-xl-5">
+                        </div>
+                    </div>
+
+                <div class="row mt-3">
+                    <div class="col-xl-4" *ngFor="let m of data.notes">
+                        <div class="card m-2 p-2">
+                            <b>Note ID: #{{ m.NOTE_ID }}</b>
+                        <div class="card-body">
+                            {{ m.NOTE }}<br>
+                        </div>
+                    </div>
+        
+                </div>    
+                </div>
+            </div>
+        </div>  
+

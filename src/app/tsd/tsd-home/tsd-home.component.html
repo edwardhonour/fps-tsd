@@ -1,0 +1,276 @@
+<fuse-loading-bar></fuse-loading-bar>
+<fuse-vertical-navigation
+    class="dark bg-gray-900 print:hidden"
+    [mode]="isScreenSmall ? 'over' : 'side'"
+    [name]="'mainNavigation'"
+    [navigation]="navigation.default"
+    [opened]="!isScreenSmall">
+    <ng-container fuseVerticalNavigationContentHeader>
+        <div class="flex items-center w-full p-4 pl-6">
+            <div class="flex items-center justify-center">
+                <img
+                    class="w-8"
+                    src="assets/images/logo/logo.png">
+            </div>
+            <div class="flex items-center ml-auto">
+                <notifications></notifications>
+                <user [showAvatar]="false"></user>
+            </div>
+        </div>
+        <div class="flex flex-col items-center w-full p-4">
+            <div class="relative w-24 h-24">
+                <img
+                    class="w-full h-full rounded-full"
+                    *ngIf="user.avatar"
+                    [src]="user.avatar"
+                    alt="User avatar">
+                <mat-icon
+                    class="icon-size-24"
+                    *ngIf="!user.avatar"
+                    [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+            </div>
+            <div class="flex flex-col items-center justify-center w-full mt-6">
+                <div class="w-full whitespace-nowrap overflow-ellipsis overflow-hidden text-center leading-normal font-medium">
+                    {{user.name}}
+                </div>
+                <div class="w-full mt-0.5 whitespace-nowrap overflow-ellipsis overflow-hidden text-center text-md leading-normal font-medium text-secondary">
+                    {{user.email}}
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <!-- Navigation footer hook -->
+    <ng-container fuseVerticalNavigationContentFooter>
+        <div class="flex flex-0 items-center justify-center h-16 pr-6 pl-2 mt-2 mb-4 opacity-12">
+            <img
+                class="max-w-36"
+                src="assets/images/logo/logo-text-on-dark.png">
+        </div>
+    </ng-container>
+</fuse-vertical-navigation>
+
+<!-- Wrapper -->
+<div class="flex flex-col flex-auto w-full min-w-0">
+
+    <!-- Header -->
+    <div class="relative flex flex-0 items-center w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-card dark:bg-transparent print:hidden">
+        <!-- Navigation toggle button -->
+        <button
+            mat-icon-button
+            (click)="toggleNavigation('mainNavigation')">
+            <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+        </button>
+        <!-- Components -->
+        <div class="flex items-center pl-2 ml-auto space-x-0.5 sm:space-x-2">
+            <languages></languages>
+            <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>
+            <search [appearance]="'bar'"></search>
+            <shortcuts></shortcuts>
+            <messages></messages>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-col flex-auto">
+        <!-- *ngIf="true" hack is required here for router-outlet to work correctly.
+             Otherwise, layout changes won't be registered and the view won't be updated! -->
+             <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12 p-4">
+                        <h1 style="font-size: 24px; font-weight: bold;">Home Page</h1>
+                    </div>
+                </div>
+            </div>
+             <div class="flex flex-col flex-auto min-w-0">
+
+                <!-- Header -->
+                <div class="bg-card">
+                    <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6 sm:px-8">
+                        <div
+                            class="relative flex self-start pt-2 pb-1 pl-5 pr-4 cursor-pointer overflow-hidden rounded-t-xl border border-b-0 bg-default"
+                            matRipple
+                            [matMenuTriggerFor]="projectsMenu">
+                            <div class="flex items-center">
+                                <div class="overflow-hidden">
+                                    <div class="font-medium leading-6 truncate">MIST</div>
+                                </div>
+                                <div class="flex items-center justify-center pl-2">
+                                    <mat-icon
+                                        class="icon-size-5"
+                                        [svgIcon]="'heroicons_solid:chevron-down'"></mat-icon>
+                                </div>
+                            </div>
+                            <mat-menu
+                                #projectsMenu="matMenu"
+                                [xPosition]="'before'">
+                            </mat-menu>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Main -->
+                
+
+                <div class="flex-auto border-t -mt-px pt-4 sm:pt-6">
+                    <div class="w-full max-w-screen-xl mx-auto">
+                        <!-- Tabs -->
+                        <mat-tab-group
+                            class="sm:px-2"
+                            [animationDuration]="'0'">
+                            <mat-tab label="TSD / Trouble Tickets">
+                                <ng-template matTabContent>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0">
+                                        <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                                            <div class="flex items-start justify-between">
+                                                <div class="text-lg font-medium tracking-tight leading-6 truncate">Open Tickets</div>
+                                                <div class="ml-2 -mt-2 -mr-3">
+                                                    <button
+                                                        mat-icon-button
+                                                        [matMenuTriggerFor]="summaryMenu">
+                                                        <mat-icon
+                                                            class="icon-size-5"
+                                                            [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                                                    </button>
+                                                    <mat-menu #summaryMenu="matMenu">
+                                                       
+                                                    </mat-menu>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-center mt-2">                                                
+                                                <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-blue-500">{{ data.open_count }}</div>
+                                                <div class="text-lg font-medium text-blue-600 dark:text-blue-500">Open</div>
+                                            </div>
+                                        </div>
+                                        <!-- Overdue -->
+                                        <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                                            <div class="flex items-start justify-between">
+                                                <div [routerLink]="['/quote-list']"  class="text-lg font-medium tracking-tight leading-6 truncate">Tenant</div>
+                                                <div class="ml-2 -mt-2 -mr-3">
+                                                    <button
+                                                        mat-icon-button
+                                                        [matMenuTriggerFor]="overdueMenu">
+                                                        <mat-icon
+                                                            class="icon-size-5"
+                                                            [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                                                    </button>
+                                                    <mat-menu #overdueMenu="matMenu">
+   
+                                                    </mat-menu>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-center mt-2">
+                                                <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-red-500">{{ data.tenant_count }}</div>
+                                                <div class="text-lg font-medium text-red-600 dark:text-red-500">Tenant Responsible</div>
+                                                <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
+  
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Issues -->
+                                        <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                                            <div class="flex items-start justify-between">
+                                                <div class="text-lg font-medium tracking-tight leading-6 truncate">Overdue</div>
+                                                <div class="ml-2 -mt-2 -mr-3">
+                                                    <button
+                                                        mat-icon-button
+                                                        [matMenuTriggerFor]="issuesMenu">
+                                                        <mat-icon
+                                                            class="icon-size-5"
+                                                            [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                                                    </button>
+                                                    <mat-menu #issuesMenu="matMenu">
+
+                                                    </mat-menu>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-center mt-2">
+                                                <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-amber-500">{{ data.assigned_count }}</div>
+                                                <div class="text-lg font-medium text-amber-600 dark:text-amber-500">Assigned</div>
+                                            </div>
+                                        </div>
+                                        <!-- Features -->
+                                        <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                                            <div class="flex items-start justify-between">
+                                                <div class="text-lg font-medium tracking-tight leading-6 truncate">New</div>
+                                                <div class="ml-2 -mt-2 -mr-3">
+                                                    <button
+                                                        mat-icon-button
+                                                        [matMenuTriggerFor]="featuresMenu">
+                                                        <mat-icon
+                                                            class="icon-size-5"
+                                                            [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                                                    </button>
+                                                    <mat-menu #featuresMenu="matMenu">
+
+                                                    </mat-menu>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-center mt-2"> 
+                                                <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-green-500">{{ data.new_count }}</div>
+                                                <div class="text-lg font-medium text-green-600 dark:text-green-500">New</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </mat-tab>            
+                        </mat-tab-group>
+                    </div>
+                    <div class="container-fluid">
+                 
+                                <div class="card card-body" style="margin-top: 20px;">
+                                <div class="row">
+                                    <div class="col-md-12 col-xl-12">
+
+                                                <div class="row">
+                                                    <div class="col-xl-10">
+                                                        <h2 style="font-size: 24px;"><b>Open Tickets</b></h2>
+                                                        <div class="col-lg-6 py-2">
+                                                            Search: <input style="max-width:320px;" class="form-control" type="text" id="term" name="term" [(ngModel)]="term"> 
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-2">
+                                                    </div>
+                                                </div>
+
+                                    <div class="row">
+                                        <div class="col-xl-3" *ngFor="let m of data.data | filter: term ">
+                                            <div class="card m-2 p-2">
+                                                <b>Ticket: #{{ m.VULNERABILITY_ID }}</b>
+                                                <b>{{ m.CREATED_DT }} - {{ m.TCM_STATUS }}</b><br>
+                                                {{ m.BUILDING_NBR }}<br>
+                                                {{ m.FACILITY_NAME }}
+   
+                                            <div class="card-body">
+                                                Address:<br>
+                                                {{ m.ADDRESS }}<br>
+                                                {{ m.CITY_NAME }} {{ m.STATE_ABBR }} {{ m.ZIP_CODE }}
+                                                <br>&nbsp;<br>
+                                                {{ m.TICKET_TYPE }}<br>
+                                                {{ m.VULNERABILITY }}
+                                                <br>&nbsp;<br>
+                                                Assigned to: 
+                                            </div>
+                                            <button [routerLink]="['/ticket-dashboard',m.VULNERABILITY_ID]" class="btn btn-primary">View/Edit</button>
+                                        </div>
+                            
+                                        </div>
+                                    </div>
+                                    </div> <!-- Col -->
+                            
+                                  
+                        </div>
+                        </div>
+                             
+              
+                </div>
+            
+            </div>
+            
+    </div>
+
+    <!-- Footer -->
+    <!--<div class="relative flex flex-0 items-center justify-start w-full h-14 px-4 md:px-6 z-49 border-t bg-card dark:bg-transparent print:hidden">
+        <span class="font-medium text-secondary">Fuse &copy; {{currentYear}}</span>
+    </div>-->
+
+</div>

@@ -1,0 +1,30 @@
+<html>
+    <h1 style="font-size: 24px;"><b>This is first component</b></h1>
+
+    <br> &nbsp; <br>
+    <h2 style="font-size: 18px;">Hello My name is {{ myname }}!!!!!</h2>
+    <h2 *ngIf="myname=='EDWARD'" style="font-size: 18px;">My Last Name is Honour!!!!!</h2>
+    <h2 *ngIf="myname!='EDWARD'" style="font-size: 18px;">My Last Name is Smith!!!!!</h2>    
+        <button (click)="showPanel()" class="btn btn-primary">Show Panel</button><br>
+        <div *ngIf="isshowing=='Y'" class="card card-body">
+            <p>HELLO THIS IS MY CARD</p>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Full Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let m of data.list">
+                    <td>{{ m.USER_NAME }}</td>
+                    <td>{{ m.FULL_NAME }}</td>
+                    <td><button [routerLink]="['/dashboard-template',m.USER_ID]" class="btn btn-primary">View</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <app-mini-component></app-mini-component>
+</html>
+
