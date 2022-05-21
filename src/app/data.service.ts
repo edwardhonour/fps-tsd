@@ -36,8 +36,8 @@ export class DataService {
     //--
     
     this.production='Y';
-    this.localPath="http://localhost/assets/data/";
-    this.remotePath="https://deepgoat.com/assets/data/"
+    this.localPath="assets/data/";
+    this.remotePath="assets/data/"
 
     if (this.production=='N') {
         this.path=this.localPath;
