@@ -1,91 +1,86 @@
 <?php
-//---------------------------------------------------------------------
-// Main API Router for this angular directory.
-// Author:  Edward Honour
-// Date: 07/18/2021
-//---------------------------------------------------------------------
-
 ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
+ini_set('SMTP','spike.dis.anl.gov');
+ini_set('memory_limit',-1);
 header('Access-Control-Allow-Headers: Access-Control-Allow-Origin, Content-Type, Authorization');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,PATCH,OPTIONS');
 header('Content-type: application/json');
-
-require_once('../../../lib/class.OracleDB.php');
-
-$uid=$_COOKIE['uid'];
-
-$X=new OracleDB();
-$db=$X->connectACN();
-
-// Require and initialize the class libraries necessary for this module. Code 
-// specific for your application goes in here.
-
-//=======================================================================================
-// APPLICATION SPECIFIC CODE BELOW - CONNECT STRING CODE ABOVE
-//=======================================================================================
-
-require_once('class.users.php');
-
-$A=new USERS();
-
-//-- a way to test the code without posting.
-if (isset($_GET['q'])) $data['q']=$_GET['q'];
-
-// Get the Data from the POST.  Note:  This is not how PHP normally sends POST data. The 
-// data from the angular post will be in a variable called data.
-
+require_once('class.TSD.php');
+$T=new TSD();
 $data = file_get_contents("php://input");
 $data = json_decode($data, TRUE);
-
 $output=array();
 
-if (!isset($data['q'])) $data['q']="vertical-menu";
-$aa=explode("/",$data['q']);
+//
+// Prevent an Error if 'q' doesnt exist.
+//
 
+if (!isset($data['q'])) $data['q']="vertical-menu";
+
+//
+// Explode the URL into its parts based on the path.
+//
+//
+$aa=explode("/",$data['q']);
 if (isset($aa[1])) {
      $data['q']=$aa[1];
      if (isset($aa[2])) {
-         $data['id']=$aa[2]; 
-	 }
+         $data['id']=$aa[2];
+         }
      if (isset($aa[3])) {
-         $data['id2']=$aa[3]; 
-	 }		 
-	 if (isset($aa[4])) {
-         $data['id3']=$aa[4]; 
-	 }		 
+         $data['id2']=$aa[3];
+         }
+         if (isset($aa[4])) {
+         $data['id3']=$aa[4];
+         }
 }
 
-//--
-//-- ROUTER based on q.
-//--
-
-	
-	switch ($data['q']) {
-        case 'list-template':
-                 $output=$A->getUsers($data);
-                break;	
-        case 'dashboard-template':
-                $output=$A->getUserDashboard($data);
-                break;		
-        case 'form-template':
-                $output=$A->getAddUserForm($data);
-                break;	
-        case 'post-edit-form':
-		        $output=$A->postEditForm($data);
-                break;
-        case 'post-add-form':
-				$output=$A->postAddForm($data);
-                break;	
+switch ($data['q']) {
+       case 'tsd-home':
+           $output=$T->getTSDHome($data);
+           break;
+       case 'show-facility':
+           $output=$T->showFacility($data);
+           break;
+       case 'facility-list':
+           $output=$T->getFacilityList($data);
+           break;
+       case 'facility-dashboard':
+           $output=$T->getFacilityDashboard($data);
+           break;
+       case 'ticket-list':
+           $output=$T->getTicketList($data);
+           break;
+       case 'account-profile':
+           $output=$T->getAccountProfile($data);
+           break;
+       case 'contact-list':
+           $output=$T->getContactList($data);
+           break;
+       case 'check-contact':
+           $output=$T->checkContact($data);
+           break;
+       case 'add-ticket':
+           $output=$T->getAddTicket($data);
+           break;
+       case 'ticket-dashboard':
+           $output=$T->getTicketDashboard($data);
+           break;
+       case 'post-add-ticket':
+           $output=$T->postAddTicket($data);
+           break;
+       case 'post-add-note':
+           $output=$T->postAddNote($data);
+           break;
         default:
-                $output=$A->getUsers($data);
+           $output=$T->getFacilityList($data);
                 break;
-				
 }
-
-$o=json_encode($output);
-$o=stripcslashes($o);
+$o=json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+//$o=json_encode($output);
+//$o=stripcslashes($o);
 $o=str_replace('null','""',$o);
 echo $o;
 ?>
