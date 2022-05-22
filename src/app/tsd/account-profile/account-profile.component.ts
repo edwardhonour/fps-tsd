@@ -238,12 +238,12 @@ export class AccountProfileComponent implements OnInit , OnDestroy {
     
       }
     
-      ip="https://deepgoat.com/data/"
+      ip="assets/data/"
       
       uploadFile()
         {
           console.log(this.file_data);
-          this.http.post(this.ip+'upload_profile.php',this.file_data)
+          this.http.post(this.ip+'upload_avatar.php',this.file_data)
           .subscribe(res => {
             location.reload()
             console.log(res.toString)

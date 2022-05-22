@@ -91,7 +91,7 @@
                 {{ data['formData']['LAST_NAME'] }}, {{ data['formData']['FIRST_NAME'] }}
             </div>
             <div class="max-w-2xl mt-6 sm:text-2xl text-center tracking-tight text-secondary">
-                {{ data['formData']['EMAIL'] }} - {{ data['formData']['PHONE_CELL'] }}
+                {{ data['formData']['EMAIL'] }} - {{ data['formData']['CELL_PHONE'] }}
             </div>
         </div>
     </div>
@@ -122,7 +122,7 @@
                         </tr>
                         <tr>
                             <th>ID:</th>
-                            <td>{{ data.id }}</td>
+                            <td>{{ data['formData']['USER_ID'] }}</td>
                         </tr>
                         <tr>
                             <th>Last Name:</th>
@@ -140,14 +140,14 @@
                             <td *ngIf="editing=='Y'"><input disabled class="form-control" [(ngModel)]="data.formData['EMAIL']" name="EMAIL" id="EMAIL"></td>
                         </tr>
                         <tr>
-                            <th>Work Phone:</th>
-                            <td *ngIf="editing=='N'">{{ data['formData']['PHONE_CELL'] }}</td>
+                            <th>Cell Phone:</th>
+                            <td *ngIf="editing=='N'">{{ data['formData']['CELL_PHONE'] }}</td>
                             <td *ngIf="editing=='Y'"><input class="form-control" [(ngModel)]="data.formData['PHONE_CELL']" name="PHONE_CELL" id="PHONE_CELL"></td>
                         </tr>
                         <tr>
                             <th></th>
-                            <td *ngIf="editing=='N'"><button class="btn btn-primary" (click)="showEdit()">Edit</button></td>
-                            <td *ngIf="editing=='Y'"><button class="btn btn-primary" (click)="postForm()">Save Changes</button><button class="btn" (click)="showEdit()">Cancel</button></td>
+                    <!--       <td *ngIf="editing=='N'"><button class="btn btn-primary" (click)="showEdit()">Edit</button></td>
+                            <td *ngIf="editing=='Y'"><button class="btn btn-primary" (click)="postForm()">Save Changes</button><button class="btn" (click)="showEdit()">Cancel</button></td> -->
                         </tr>
                     </tbody>
                 </div>

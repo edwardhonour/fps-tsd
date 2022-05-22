@@ -234,7 +234,7 @@
 
                                     <div class="row">
                                         <div class="col-xl-3" *ngFor="let m of data.data | filter: term ">
-                                            <div class="card m-2 p-2">
+                                            <div class="card m-2 p-2" style="height:450px !important;">
                                                 <b>Ticket: #{{ m.VULNERABILITY_ID }}</b>
                                                 <b>{{ m.CREATED_DT }} - {{ m.TCM_STATUS }}</b><br>
                                                 {{ m.BUILDING_NBR }}<br>
