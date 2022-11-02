@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 //===============================================================================================
 // MODIFIED INFRASTRUCTURE SURVEY TOOL
@@ -18,15 +18,28 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,PATCH,OPTIONS');
 header('Content-type: application/json');
 
-require_once('class.XRDB.php');
-$X=new XRDB();
+//require_once('class.XRDB.php');
+//$X=new XRDB();
+
+require_once('../../../lib/class.OracleDB.php');
+$X=new OracleDB();
 
 $data = file_get_contents("php://input");
 $data = json_decode($data, TRUE);
 
-$sql="select * from FPS_USER where USER_ID = " . $data['uid'];
+$sql="select * from TBL_USER where USER_ID = " . $data['uid'];
 $user=$X->sql($sql);
 $role=$user[0]['ROLE'];
+
+$sql="select * from FPS_USER_PRIVS where USER_ID = " . $data['uid'] . " AND PRIV_ID = 201";
+$u=$X->sql($sql);
+if (sizeof($u)>0) {
+  $tsd="Y";
+} else {
+  $tsd="N";
+}
+
+if ($role=="LESPM"||$role=="AD") $tsd="Y";
 
 $menu=array();
 $item=array();
@@ -39,7 +52,6 @@ $item['icon']="heroicons_outline:home";
 $item['children']=array();
 
 $children=array();
-
 
 //-- Home
 $child=array();
@@ -76,7 +88,17 @@ $child['type']="basic";
 $child['icon']="heroicons_outline:clipboard-check";
 $child['link']="/ticket-list/1";
 array_push($children,$child);
-                
+
+if ($tsd=="Y") {
+//    $child=array(); 
+//    $child['id']="db"; 
+//    $child['title']="Closed Tickets"; 
+//    $child['type']="basic";
+//    $child['icon']="heroicons_outline:clipboard-check";
+//    $child['link']="/ticket-list/1";
+//    array_push($children,$child);
+} 
+               
 //-- Aging Report
 $child=array(); 
 $child['id']="db";

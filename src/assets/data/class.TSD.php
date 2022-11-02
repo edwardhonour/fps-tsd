@@ -1,14 +1,16 @@
-<?php
+﻿<?php
 
-require_once('class.XRDB.php');
+require_once('../../../lib/class.OracleDB.php');
+//require_once('class.XRDB.php');
 
 class TSD {
 
         protected $X;
         protected $demo;
+        
 
         function __construct() {
-            $this->X=new XRDB();
+            $this->X=new OracleDB();
         }
 
 
@@ -332,11 +334,6 @@ class TSD {
                 if ($region=="7") $inclause=" and REGION_ID in (7,8,9,10) ";
                 if ($region=="8") $inclause=" and REGION_ID in (7,8,9,10) ";
                 if ($region=="9") $inclause=" and REGION_ID in (7,8,9,10) ";
-";
-        $ticketData['CONTACT_TITLE']="";
-        $ticketData['CONTACT_AGENCY_CODE']="";
-        $ticketData['CONTACT_AGENCY_NAME']="";
-        $ticketData['CONTACT_TYPE']="";
                 if ($region=="10") $inclause=" and REGION_ID in (7,8,9,10) ";
                 if ($region=="11") $inclause=" and REGION_ID in (11) ";
               } else {
@@ -363,13 +360,14 @@ class TSD {
         $sql .= " VV.CONTACT_CALL_SIGN AS CONTACT_CALL_SIGN, VV.TICKET_TYPE AS TICKET_TYPE, ";
         $sql .= " VV.CREATED_DT AS CREATED_DT ";
         $sql .= " FROM RWH_DIM_FACILITY F, FORMVULNERABILITY VV ";
-         if ($data['id']=="1") {
-        $sql .= " WHERE VV.TCM_STATUS IN ('CLOSED','COMPLETE') AND F.FPS_RESPONSIBLE = 'Y' AND F.BUILDING_NBR = VV.BUILDING_NBR AND VV.SOURCE = 'TSD' ";
-         } else {
-        $sql .= " WHERE VV.TCM_STATUS NOT IN ('CLOSED','COMPLETE') AND F.FPS_RESPONSIBLE = 'Y' AND F.BUILDING_NBR = VV.BUILDING_NBR AND VV.SOURCE = 'TSD' ";
+        if ($data['id']=="1") {
+         	$sql .= " WHERE VV.TCM_STATUS IN ('CLOSED','COMPLETE') AND F.FPS_RESPONSIBLE = 'Y' AND F.BUILDING_NBR = VV.BUILDING_NBR AND VV.SOURCE = 'TSD' ";   
+        } 
+        else {
+           $sql .= " WHERE VV.TCM_STATUS NOT IN ('CLOSED','COMPLETE') AND F.FPS_RESPONSIBLE = 'Y' AND F.BUILDING_NBR = VV.BUILDING_NBR AND VV.SOURCE = 'TSD' ";
         }
  //       if ($searchtype == "regionfacilities") { $sql .= $inclause; }
-        $sql .= " ORDER BY BUILDING_NBR";
+        $sql .= " ORDER BY VULNERABILITY_ID DESC";
 //      echo $sql;
         $aa=$this->X->sql($sql);
         $output=array();
@@ -414,12 +412,16 @@ class TSD {
          $t=$this->X->sql($sql);
          if (sizeof($t)>0) {
             $formData=$t[0];
+            if ($t[0]['MASTER_CONTACT_ID']!="") {
+                $output['avatar']="assets/data/show_avatar.php?id=" . $t[0]['MASTER_CONTACT_ID'];
+            }
          } else {
             $formData=array();
          }
          $output['formData']=$formData;
          return $output;
     }
+
     function getAddTicket($data) {
          $output=$this->start_output($data);
          $uid=$data['uid'];
@@ -495,6 +497,13 @@ class TSD {
          }
 
          $id=$data['id'];
+         $sql="SELECT COUNT(*) AS C FROM FPS_USER_PRIVS WHERE USER_ID = " . $uid . " AND PRIV_ID = 201";
+         $r = $this->X->sql($sql);
+         if ($r[0]['C']==0) {
+            $output['TSD']='N';
+         } else {
+            $output['TSD']='Y';
+         }
 
          $sql="SELECT * FROM FORMVULNERABILITY WHERE VULNERABILITY_ID = " . $id;
          $r = $this->X->sql($sql);
@@ -567,10 +576,14 @@ class TSD {
            $output['TCM_DATE']=$rrr2['TCM_DATE'];
 
            if ($rrr2['TCM_ASSIGNED_TO']!="0") {
-                  $sql="SELECT LAST_NAME, FIRST_NAME FROM FPS_USER WHERE USER_ID = " . $output['TCM_ASSIGNED_TO'];
+                  $sql="SELECT LAST_NAME, FIRST_NAME FROM TBL_USER WHERE USER_ID = " . $output['TCM_ASSIGNED_TO'];
                   $s = $this->X->sql($sql);
-                  $rrr3 = $s[0];
-                  $output['TCM_ASSIGNED_TO'] = $rrr3['LAST_NAME'] . ', ' . $rrr3['FIRST_NAME'];
+                  if (sizeof($s)==0) {
+			$output['TCM_ASSIGNED_TO'] = "User " . $output['TCM_ASSIGNED_TO'] . " not found";
+                  } else {
+                     $rrr3 = $s[0];
+                     $output['TCM_ASSIGNED_TO'] = $rrr3['LAST_NAME'] . ', ' . $rrr3['FIRST_NAME'];
+                  }
            } else {
                   $output['TCM_ASSIGNED_TO'] = "Not Assigned";
            }

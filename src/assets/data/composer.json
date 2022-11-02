@@ -1,0 +1,17 @@
+{
+    "name": "nuaxess-dev/data",
+    "autoload": {
+        "psr-4": {
+            "NuaxessDev\\Data\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Edward Honour",
+            "email": "ed@tritaniumlabs.com"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.23"
+    }
+}
